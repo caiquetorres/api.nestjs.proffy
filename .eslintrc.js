@@ -2,19 +2,19 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     parserOptions: {
         project: 'tsconfig.json',
-        sourceType: 'module',
+        sourceType: 'module'
     },
     plugins: ['@typescript-eslint/eslint-plugin', 'import-helpers'],
     extends: [
         'plugin:@typescript-eslint/eslint-recommended',
         'plugin:@typescript-eslint/recommended',
         'prettier',
-        'prettier/@typescript-eslint',
+        'prettier/@typescript-eslint'
     ],
     root: true,
     env: {
         node: true,
-        jest: true,
+        jest: true
     },
     rules: {
         '@typescript-eslint/interface-name-prefix': 'off',
@@ -31,10 +31,10 @@ module.exports = {
                     '/.proxy|.payload/',
                     '/.controller/',
                     '/.service/',
-                    [('parent', 'sibling', 'index')],
+                    [('parent', 'sibling', 'index')]
                 ],
-                alphabetize: { order: 'asc', ignoreCase: true },
-            },
-        ],
-    },
-};
+                alphabetize: { order: 'asc', ignoreCase: true }
+            }
+        ]
+    }
+}
