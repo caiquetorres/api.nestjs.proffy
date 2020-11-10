@@ -1,10 +1,14 @@
-import { Column } from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
 
 import { BaseEntity } from 'src/common/base-entity'
+import { FavoriteEntity } from 'src/modules/favorite/entities/favorite.entity'
+import { SubjectEntity } from 'src/modules/subject/entities/subject.entity'
+import { TimeEntity } from 'src/modules/time/entities/time.entity'
 
 import { UserProxy } from '../models/user.proxy'
 import { ToProxy } from 'src/common/to-proxy'
 
+@Entity('users')
 export class UserEntity extends BaseEntity implements ToProxy<UserProxy> {
     public constructor(partial: Partial<UserEntity>) {
         super()
@@ -64,6 +68,30 @@ export class UserEntity extends BaseEntity implements ToProxy<UserProxy> {
         nullable: true
     })
     public price?: number
+
+    @ManyToOne(
+        type => SubjectEntity,
+        subject => subject.users
+    )
+    subject: SubjectEntity
+
+    @OneToMany(
+        type => TimeEntity,
+        time => time.user
+    )
+    times: TimeEntity[]
+
+    @OneToMany(
+        type => FavoriteEntity,
+        favorite => favorite.user
+    )
+    users: FavoriteEntity[]
+
+    @OneToMany(
+        type => FavoriteEntity,
+        favorite => favorite.favoriteUser
+    )
+    favorites: FavoriteEntity[]
 
     public toProxy(): UserProxy {
         return new UserProxy(this)
