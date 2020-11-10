@@ -1,6 +1,7 @@
 import { UserEntity } from '../entities/user.entity'
 
 export class UserProxy {
+    public id: number
     public photo?: string
     public name: string
     public lastName: string
@@ -10,6 +11,7 @@ export class UserProxy {
     public price?: number
 
     public constructor(entity: UserEntity) {
+        this.id = entity.id
         this.photo = entity.photo
         this.name = entity.name
         this.lastName = entity.lastName
