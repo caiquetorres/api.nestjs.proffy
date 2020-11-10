@@ -1,4 +1,8 @@
-import { Controller } from '@nestjs/common';
+import { Controller } from '@nestjs/common'
 
-@Controller('time')
-export class TimeController {}
+import { TimeService } from '../services/time.service'
+
+@Controller('users/:userId/times')
+export class TimeController {
+    public constructor(private readonly timeService: TimeService) {}
+}
