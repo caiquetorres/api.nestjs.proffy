@@ -52,6 +52,13 @@ export class UserEntity extends BaseEntity implements ToProxy<UserProxy> {
 
     @Column({
         type: 'varchar',
+        length: 100,
+        nullable: false
+    })
+    public roles: string
+
+    @Column({
+        type: 'varchar',
         length: 20,
         nullable: true
     })
