@@ -6,10 +6,10 @@ import {
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 
-import { User } from 'src/utils/type.shared'
+import { RequestUser } from 'src/utils/type.shared'
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class RolesAuthGuard implements CanActivate {
     canActivate(context: ExecutionContext): Promise<boolean> | boolean {
         const roles = new Reflector().get<string[]>(
             'roles',
@@ -17,8 +17,10 @@ export class RolesGuard implements CanActivate {
         )
         if (!roles) return true
 
-        const request = context.switchToHttp().getRequest()
-        const user: User = request.user
+        const request = context
+            .switchToHttp()
+            .getRequest<{ user: RequestUser }>()
+        const user = request.user
 
         if (!user)
             throw new UnauthorizedException(
