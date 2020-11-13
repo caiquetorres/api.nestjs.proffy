@@ -1,4 +1,5 @@
 import {
+    ConflictException,
     Injectable,
     NotFoundException,
     UnauthorizedException
@@ -12,7 +13,10 @@ import { UserEntity } from '../entities/user.entity'
 import { CreateUserPayload } from '../models/create-user.payload'
 
 import { hasPermission } from 'src/utils/functions'
+import { encryptPassword } from 'src/utils/password'
 import { RequestUser } from 'src/utils/type.shared'
+
+import { Roles } from 'src/models/enums/roles.enum'
 
 @Injectable()
 export class UserService extends TypeOrmCrudService<UserEntity> {
@@ -23,15 +27,39 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         super(repository)
     }
 
+    /**
+     * Method that can create a new user in the database
+     * @param createUserPayload stores the new user data
+     */
     public async create(
-        requestUser: RequestUser,
         createUserPayload: CreateUserPayload
     ): Promise<UserEntity> {
-        const entity = new UserEntity(createUserPayload)
+        const { password, roles, ...rest } = createUserPayload
+
+        const hasUserWithEmail = await UserEntity.hasUserWithEmail(
+            createUserPayload.email
+        )
+        if (hasUserWithEmail)
+            throw new ConflictException(
+                `The entity identified by "${createUserPayload.email}" already exists`
+            )
+
+        const encryptedPassword = await encryptPassword(password)
+
+        const entity = new UserEntity({
+            password: encryptedPassword,
+            roles: roles ?? Roles.USER,
+            ...rest
+        })
 
         return await entity.save()
     }
 
+    /**
+     * Method that can return only one user entity from the database
+     * @param entityId stores the user id
+     * @param requestUser stores the user basic data
+     */
     public async get(
         entityId: number,
         requestUser: RequestUser
