@@ -80,27 +80,32 @@ export class UserEntity extends BaseEntity implements ToProxy<UserProxy> {
         type => SubjectEntity,
         subject => subject.users
     )
-    subject: SubjectEntity
+    public subject: SubjectEntity
 
     @OneToMany(
         type => TimeEntity,
         time => time.user
     )
-    times: TimeEntity[]
+    public times: TimeEntity[]
 
     @OneToMany(
         type => FavoriteEntity,
         favorite => favorite.user
     )
-    users: FavoriteEntity[]
+    public users: FavoriteEntity[]
 
     @OneToMany(
         type => FavoriteEntity,
         favorite => favorite.favoriteUser
     )
-    favorites: FavoriteEntity[]
+    public favorites: FavoriteEntity[]
 
     public toProxy(): UserProxy {
         return new UserProxy(this)
+    }
+
+    public static async hasUserWithEmail(email: string): Promise<boolean> {
+        const entity = await this.findOne({ email })
+        return !!entity
     }
 }
