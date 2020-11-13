@@ -9,27 +9,20 @@ import { UserEntity } from 'src/modules/user/entities/user.entity'
 
 import { LoginPayload } from '../models/login.payload'
 import { TokenProxy } from '../models/token.proxy'
-import { CreateUserPayload } from 'src/modules/user/models/create-user.payload'
 
-import * as bcryptjs from 'bcryptjs'
+import { comparePassword } from 'src/utils/password'
 import { RequestUser } from 'src/utils/type.shared'
 
 @Injectable()
 export class AuthService {
     public constructor(private readonly jwtService: JwtService) {}
 
-    public async register(
-        createUserPayload: CreateUserPayload
-    ): Promise<UserEntity> {
-        return null
-    }
-
     /**
      * Method that can return the token
-     * @param userProps stores the user base data
+     * @param requestUser stores the user base data
      */
-    public async signIn(userProps: RequestUser): Promise<TokenProxy> {
-        const { id, email } = userProps
+    public async signIn(requestUser: RequestUser): Promise<TokenProxy> {
+        const { id, email } = requestUser
         const token = await this.jwtService.signAsync({
             id,
             email
@@ -54,10 +47,7 @@ export class AuthService {
                 `The entity identified by "${email}" was not found`
             )
 
-        const passwordIsMatch = await bcryptjs.compare(
-            password,
-            entity.password
-        )
+        const passwordIsMatch = await comparePassword(password, entity.password)
 
         if (!passwordIsMatch)
             throw new UnauthorizedException(
