@@ -2,7 +2,7 @@ import { Controller, Post, UseGuards } from '@nestjs/common'
 
 import { User } from 'src/decorators/user/user.decorator'
 
-import { LocalAuthGuard } from 'src/guards/local.guard'
+import { LocalAuthGuard } from 'src/guards/local/local.guard'
 
 import { TokenProxy } from '../models/token.proxy'
 

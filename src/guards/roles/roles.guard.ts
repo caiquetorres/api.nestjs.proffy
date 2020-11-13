@@ -6,8 +6,6 @@ import {
 } from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 
-import { RequestUser } from 'src/utils/type.shared'
-
 @Injectable()
 export class RolesAuthGuard implements CanActivate {
     canActivate(context: ExecutionContext): Promise<boolean> | boolean {
@@ -15,12 +13,10 @@ export class RolesAuthGuard implements CanActivate {
             'roles',
             context.getHandler()
         )
+
         if (!roles) return true
 
-        const request = context
-            .switchToHttp()
-            .getRequest<{ user: RequestUser }>()
-        const user = request.user
+        const user = context.switchToHttp().getRequest().user
 
         if (!user)
             throw new UnauthorizedException(
