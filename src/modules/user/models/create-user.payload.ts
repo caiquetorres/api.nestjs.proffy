@@ -1,4 +1,4 @@
-import { IsDefined, IsEmail, IsString } from 'class-validator'
+import { IsDefined, IsEmail, IsOptional, IsString } from 'class-validator'
 import { DefaultValidationMessages } from 'src/models/enums/default-validation-messages.enum'
 
 export class CreateUserPayload {
@@ -18,4 +18,8 @@ export class CreateUserPayload {
     @IsString({ message: DefaultValidationMessages.IsString })
     @IsEmail({}, { message: DefaultValidationMessages.IsEmail })
     public password: string
+
+    @IsOptional()
+    @IsString({ message: DefaultValidationMessages.IsString })
+    public roles: string
 }
