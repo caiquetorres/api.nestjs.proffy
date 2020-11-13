@@ -16,7 +16,7 @@ import { hasPermission } from 'src/utils/functions'
 import { encryptPassword } from 'src/utils/password'
 import { RequestUser } from 'src/utils/type.shared'
 
-import { Roles } from 'src/models/enums/roles.enum'
+import { RoleTypes } from 'src/models/enums/roles.enum'
 
 @Injectable()
 export class UserService extends TypeOrmCrudService<UserEntity> {
@@ -48,7 +48,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
 
         const entity = new UserEntity({
             password: encryptedPassword,
-            roles: roles ?? Roles.USER,
+            roles: roles ?? RoleTypes.USER,
             ...rest
         })
 
@@ -65,6 +65,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         requestUser: RequestUser
     ): Promise<UserEntity> {
         const entity = UserEntity.findOne(entityId)
+
         if (!hasPermission(entityId, requestUser))
             throw new UnauthorizedException(
                 'You have no permission to access those sources'

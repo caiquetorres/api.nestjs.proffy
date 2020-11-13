@@ -1,5 +1,5 @@
 import { RequestUser } from './type.shared'
-import { Roles } from 'src/models/enums/roles.enum'
+import { RoleTypes } from 'src/models/enums/roles.enum'
 
 /**
  * Function that can test if the request user has the type "ADMIM"
@@ -9,7 +9,7 @@ export function isAdminUser(requestUser: RequestUser): boolean {
     return (
         requestUser &&
         requestUser.roles &&
-        hasRole(requestUser.roles, Roles.ADMIN)
+        hasRole(requestUser.roles, RoleTypes.ADMIN)
     )
 }
 
@@ -31,7 +31,7 @@ export function hasRole(roles: string, targetRoles: string): boolean {
  * @param requestUser stores the user basic data
  */
 export function hasPermission(id: number, requestUser: RequestUser): boolean {
-    return requestUser.id === id || hasRole(requestUser.roles, Roles.ADMIN)
+    return requestUser.id === id || hasRole(requestUser.roles, RoleTypes.ADMIN)
 }
 
 /**
