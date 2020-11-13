@@ -1,5 +1,5 @@
 import { IsDefined, IsString } from 'class-validator'
-import { DefaultValidationMessages } from 'src/models/enums/default-validation-messages'
+import { DefaultValidationMessages } from 'src/models/enums/default-validation-messages.enum'
 
 export class CreateSubjectPayload {
     @IsDefined({ message: 'É necessário informar o nome da matéria.' })

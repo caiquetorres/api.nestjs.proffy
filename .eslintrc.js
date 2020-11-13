@@ -25,12 +25,15 @@ module.exports = {
             {
                 newlinesBetween: 'always',
                 groups: [
-                    '/(@nestjs)|^typeorm/',
+                    '/@nestjs|^typeorm/',
                     '/.types/',
+                    '/.decorator/',
+                    '/.guard/',
                     '/.entity/',
                     '/.proxy|.payload/',
-                    '/.controller/',
                     '/.service/',
+                    '/.controller/',
+                    '/utils/',
                     [('parent', 'sibling', 'index')]
                 ],
                 alphabetize: { order: 'asc', ignoreCase: true }

@@ -1,5 +1,5 @@
 import { IsDefined, IsNumber } from 'class-validator'
-import { DefaultValidationMessages } from 'src/models/enums/default-validation-messages'
+import { DefaultValidationMessages } from 'src/models/enums/default-validation-messages.enum'
 
 export class CreateTimePayload {
     @IsNumber({}, { message: DefaultValidationMessages.IsNumber })

@@ -6,6 +6,7 @@ export class UserProxy {
     public name: string
     public lastName: string
     public email: string
+    public roles: string
     public whatsapp?: string
     public description?: string
     public price?: number
@@ -16,6 +17,7 @@ export class UserProxy {
         this.name = entity.name
         this.lastName = entity.lastName
         this.email = entity.email
+        this.roles = entity.roles
         this.whatsapp = entity.whatsapp
         this.description = entity.description
         this.price = entity.price
