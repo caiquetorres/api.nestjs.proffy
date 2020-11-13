@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common'
 
+import { Roles } from 'src/decorators/roles/roles.decorator'
 import { User } from 'src/decorators/user/user.decorator'
 
-import { JwtAuthGuard } from 'src/guards/jwt.guard'
-import { RolesAuthGuard } from 'src/guards/roles.guard'
+import { JwtAuthGuard } from 'src/guards/jwt/jwt.guard'
+import { RolesAuthGuard } from 'src/guards/roles/roles.guard'
 
 import { CreateUserPayload } from '../models/create-user.payload'
 import { UserProxy } from '../models/user.proxy'
@@ -11,6 +12,8 @@ import { UserProxy } from '../models/user.proxy'
 import { UserService } from '../services/user.service'
 
 import { RequestUser } from 'src/utils/type.shared'
+
+import { RoleTypes } from 'src/models/enums/roles.enum'
 
 @Controller('users')
 export class UserController {
@@ -32,7 +35,9 @@ export class UserController {
      * Method that can return the request user
      * @param requestUser stores the user basic data
      */
-    @UseGuards(JwtAuthGuard, RolesAuthGuard)
+    @Roles(RoleTypes.USER)
+    @UseGuards(RolesAuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get('me')
     public async getMe(@User() requestUser: RequestUser): Promise<UserProxy> {
         const entity = await this.userService.get(requestUser.id, requestUser)

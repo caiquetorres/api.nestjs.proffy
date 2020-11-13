@@ -22,11 +22,7 @@ export class AuthService {
      * @param requestUser stores the user base data
      */
     public async signIn(requestUser: RequestUser): Promise<TokenProxy> {
-        const { id, email } = requestUser
-        const token = await this.jwtService.signAsync({
-            id,
-            email
-        })
+        const token = await this.jwtService.signAsync(requestUser)
         return new TokenProxy(token)
     }
 
