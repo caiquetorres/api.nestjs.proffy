@@ -16,6 +16,7 @@ export class BaseEntity extends BaseEntityTypeOrm {
     updateAt: Date
 
     public static async exists(id: number): Promise<boolean> {
-        return !!this.find({ id })
+        const entity = await this.findOne({ id })
+        return !!entity
     }
 }
