@@ -11,6 +11,7 @@ import { Repository } from 'typeorm'
 import { UserEntity } from '../entities/user.entity'
 
 import { CreateUserPayload } from '../models/create-user.payload'
+import { UpdateUserPayload } from '../models/update-user.payload'
 
 import { hasPermission } from 'src/utils/functions'
 import { encryptPassword } from 'src/utils/password'
@@ -51,31 +52,78 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
             roles: roles ?? RoleTypes.USER,
             ...rest
         })
-
         return await entity.save()
     }
 
     /**
      * Method that can return only one user entity from the database
-     * @param entityId stores the user id
+     * @param userId stores the user id
      * @param requestUser stores the user basic data
      */
     public async get(
-        entityId: number,
-        requestUser: RequestUser
+        requestUser: RequestUser,
+        userId: number
     ): Promise<UserEntity> {
-        const entity = UserEntity.findOne(entityId)
-
-        if (!hasPermission(entityId, requestUser))
+        if (!hasPermission(userId, requestUser))
             throw new UnauthorizedException(
                 'You have no permission to access those sources'
             )
 
+        const entity = await UserEntity.findOne({ id: userId })
+
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by "${entityId}" was not found`
+                `The entity identified by "${userId}" was not found`
             )
 
         return entity
+    }
+
+    /**
+     * Method that can update the user data based on the payload
+     * @param requestUser stores the user basic data
+     * @param userId stores the user id
+     * @param updateUserPayload stores the user new data
+     */
+    public async update(
+        requestUser: RequestUser,
+        userId: number,
+        updateUserPayload: UpdateUserPayload
+    ): Promise<void> {
+        if (!hasPermission(userId, requestUser))
+            throw new UnauthorizedException(
+                'You have no permission to access those sources'
+            )
+
+        const exists = await UserEntity.exists(userId)
+        if (!exists)
+            throw new NotFoundException(
+                `The entity identified by "${userId}" was not found`
+            )
+
+        await UserEntity.update({ id: userId }, updateUserPayload)
+    }
+
+    /**
+     * Method that can remove some entity of the database
+     * @param requestUser stores the user basic data
+     * @param userId stores the user id
+     */
+    public async delete(
+        requestUser: RequestUser,
+        userId: number
+    ): Promise<void> {
+        if (!hasPermission(userId, requestUser))
+            throw new UnauthorizedException(
+                'You have no permission to access those sources'
+            )
+
+        const exists = await UserEntity.exists(userId)
+        if (!exists)
+            throw new NotFoundException(
+                `The entity identified by "${userId}" was not found`
+            )
+
+        await UserEntity.delete({ id: userId })
     }
 }

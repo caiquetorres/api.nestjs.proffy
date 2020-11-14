@@ -27,11 +27,11 @@ export function hasRole(roles: string, targetRoles: string): boolean {
 
 /**
  * Function that can check if the user (identified by "id") has the permission
- * @param id stores the user id
+ * @param userId stores the user id
  * @param requestUser stores the user basic data
  */
-export function hasPermission(id: number, requestUser: RequestUser): boolean {
-    return requestUser.id === id || hasRole(requestUser.roles, RoleTypes.ADMIN)
+export function hasPermission(userId: number, requestUser: RequestUser): boolean {
+    return requestUser.id == userId || hasRole(requestUser.roles, RoleTypes.ADMIN)
 }
 
 /**
