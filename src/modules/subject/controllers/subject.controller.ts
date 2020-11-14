@@ -1,5 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common'
-import { Crud, CrudRequest, GetManyDefaultResponse, Override, ParsedRequest } from '@nestjsx/crud'
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Param,
+    Post,
+    Put,
+    UseGuards
+} from '@nestjs/common'
+import {
+    Crud,
+    CrudRequest,
+    Override,
+    GetManyDefaultResponse,
+    ParsedRequest
+} from '@nestjsx/crud'
 
 import { Roles } from '../../../decorators/roles/roles.decorator'
 import { User } from '../../../decorators/user/user.decorator'
@@ -21,13 +36,12 @@ import { RoleTypes } from '../../../models/enums/roles.enum'
 
 @Crud({
     model: {
-        type: SubjectEntity,
-    },
+        type: SubjectEntity
+    }
 })
 @Controller('subjects')
 export class SubjectController {
-    public constructor(private readonly subjectService: SubjectService) {
-    }
+    public constructor(private readonly subjectService: SubjectService) {}
 
     /**
      * Method that can save a subject entity in the database
@@ -42,7 +56,10 @@ export class SubjectController {
         @User() requestUser: RequestUser,
         @Body() createSubjectPayload: CreateSubjectPayload
     ): Promise<SubjectProxy> {
-        const entity = await this.subjectService.create(requestUser, createSubjectPayload)
+        const entity = await this.subjectService.create(
+            requestUser,
+            createSubjectPayload
+        )
         return entity.toProxy()
     }
 
@@ -66,9 +83,7 @@ export class SubjectController {
      */
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    public async get(
-        @Param('id') subjectId: number
-    ): Promise<SubjectProxy> {
+    public async get(@Param('id') subjectId: number): Promise<SubjectProxy> {
         const entity = await this.subjectService.get(subjectId)
         return entity.toProxy()
     }
@@ -88,7 +103,11 @@ export class SubjectController {
         @Param('id') subjectId: number,
         @Body() updateSubjectPayload: UpdateSubjectPayload
     ): Promise<void> {
-        await this.subjectService.update(requestUser, subjectId, updateSubjectPayload)
+        await this.subjectService.update(
+            requestUser,
+            subjectId,
+            updateSubjectPayload
+        )
     }
 
     /**

@@ -27,8 +27,7 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
 
 @Controller('users')
 export class UserController {
-    public constructor(private readonly userService: UserService) {
-    }
+    public constructor(private readonly userService: UserService) {}
 
     /**
      * Method that can create a new user in the database
