@@ -100,11 +100,12 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
             )
         const { subjectId, ...rest } = updateUserPayload
 
-        let subject: SubjectEntity
+        if (subjectId === undefined) {
+            await UserEntity.update({ id: userId }, { ...rest })
+            return
+        }
 
-        if (subjectId !== undefined)
-            subject = await this.subjectService.get(subjectId)
-
+        const subject = await this.subjectService.get(subjectId)
         await UserEntity.update({ id: userId }, { ...rest, subject })
     }
 
