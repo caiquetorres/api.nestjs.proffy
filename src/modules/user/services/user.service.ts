@@ -13,6 +13,8 @@ import { UserEntity } from '../entities/user.entity'
 import { CreateUserPayload } from '../models/create-user.payload'
 import { UpdateUserPayload } from '../models/update-user.payload'
 
+import { SubjectService } from 'src/modules/subject/services/subject.service'
+
 import { encryptPassword } from 'src/utils/password'
 import { RequestUser } from 'src/utils/type.shared'
 import { hasPermission } from 'src/utils/validation'
@@ -23,7 +25,8 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
 export class UserService extends TypeOrmCrudService<UserEntity> {
     public constructor(
         @InjectRepository(UserEntity)
-        public repository: Repository<UserEntity>
+        private readonly repository: Repository<UserEntity>,
+        private readonly subjectService: SubjectService
     ) {
         super(repository)
     }
@@ -69,7 +72,10 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
                 'You have no permission to access those sources'
             )
 
-        const entity = await UserEntity.findOne({ id: userId })
+        const entity = await UserEntity.findOne({
+            where: { id: userId },
+            relations: ['subject']
+        })
 
         if (!entity)
             throw new NotFoundException(
@@ -95,13 +101,21 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
                 'You have no permission to access those sources'
             )
 
-        const exists = await UserEntity.exists(userId)
-        if (!exists)
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
             throw new NotFoundException(
                 `The entity identified by "${userId}" was not found`
             )
 
-        await UserEntity.update({ id: userId }, updateUserPayload)
+        const { subjectId, ...rest } = updateUserPayload
+        const subject = await this.subjectService.get(subjectId)
+        if (!subject)
+            throw new NotFoundException(
+                `The entity identified by "${subjectId}" was not found`
+            )
+
+        console.log(subject)
+        await UserEntity.update({ id: userId }, { ...rest, subject })
     }
 
     /**
