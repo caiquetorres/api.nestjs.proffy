@@ -7,12 +7,13 @@ export class TimeProxy {
     public weekDay: number
     public from: Date
     public to: Date
-    public user?: UserProxy
+    public user: UserProxy
 
-    /*
-    rever
-    */
-    public constructor(partial: Partial<TimeEntity>) {
-        Object.assign(this, partial)
+    public constructor(entity: TimeEntity) {
+        this.id = entity.id
+        this.weekDay = entity.weekDay
+        this.from = entity.from
+        this.to = entity.to
+        this.user = entity.user.toProxy()
     }
 }
