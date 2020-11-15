@@ -9,7 +9,7 @@ import { ToProxy } from 'src/common/to-proxy'
 @Entity('subjects')
 export class SubjectEntity extends BaseEntity implements ToProxy<SubjectProxy> {
     public constructor(partial: Partial<SubjectEntity>) {
-        super();
+        super()
         Object.assign(this, partial)
     }
 
