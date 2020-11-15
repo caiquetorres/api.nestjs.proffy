@@ -64,7 +64,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         requestUser: RequestUser,
         userId: number
     ): Promise<UserEntity> {
-        if (!hasPermission(userId, requestUser))
+        if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
                 'You have no permission to access those sources'
             )
@@ -90,7 +90,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         userId: number,
         updateUserPayload: UpdateUserPayload
     ): Promise<void> {
-        if (!hasPermission(userId, requestUser))
+        if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
                 'You have no permission to access those sources'
             )
@@ -113,7 +113,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         requestUser: RequestUser,
         userId: number
     ): Promise<void> {
-        if (!hasPermission(userId, requestUser))
+        if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
                 'You have no permission to access those sources'
             )

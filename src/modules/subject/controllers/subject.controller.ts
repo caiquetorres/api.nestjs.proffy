@@ -72,9 +72,8 @@ export class SubjectController {
     @Get()
     public async getMany(
         @ParsedRequest() crudRequest: CrudRequest
-    ): Promise<GetManyDefaultResponse<SubjectProxy>> {
-        const getMany = await this.subjectService.getMany(crudRequest)
-        return getMany as GetManyDefaultResponse<SubjectProxy>
+    ): Promise<GetManyDefaultResponse<SubjectProxy> | SubjectProxy[]> {
+        return await this.subjectService.getMany(crudRequest)
     }
 
     /**

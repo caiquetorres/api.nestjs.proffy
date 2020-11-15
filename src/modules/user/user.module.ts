@@ -15,6 +15,7 @@ import { AuthModule } from '../auth/auth.module'
         TypeOrmModule.forFeature([UserEntity])
     ],
     controllers: [UserController],
-    providers: [UserService]
+    providers: [UserService],
+    exports: [UserService]
 })
 export class UserModule {}

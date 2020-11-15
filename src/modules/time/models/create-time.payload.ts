@@ -11,4 +11,8 @@ export class CreateTimePayload {
 
     @IsDefined({ message: 'É necessário informar a data final.' })
     public to: Date
+
+    @IsNumber({}, { message: DefaultValidationMessages.IsNumber })
+    @IsDefined({ message: 'É necessário informar o id do usuário.' })
+    public userId: number
 }

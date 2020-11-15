@@ -3,8 +3,11 @@ import { Column, Entity, ManyToOne } from 'typeorm'
 import { BaseEntity } from 'src/common/base-entity'
 import { UserEntity } from 'src/modules/user/entities/user.entity'
 
+import { TimeProxy } from '../models/time.proxy'
+import { ToProxy } from 'src/common/to-proxy'
+
 @Entity('times')
-export class TimeEntity extends BaseEntity {
+export class TimeEntity extends BaseEntity implements ToProxy<TimeProxy> {
     public constructor(partial: Partial<TimeEntity>) {
         super()
         Object.assign(this, partial)
@@ -36,4 +39,8 @@ export class TimeEntity extends BaseEntity {
         }
     )
     public user: UserEntity
+
+    toProxy(): TimeProxy {
+        return new TimeProxy(this)
+    }
 }
