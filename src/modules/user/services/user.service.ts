@@ -13,9 +13,9 @@ import { UserEntity } from '../entities/user.entity'
 import { CreateUserPayload } from '../models/create-user.payload'
 import { UpdateUserPayload } from '../models/update-user.payload'
 
-import { hasPermission } from 'src/utils/functions'
 import { encryptPassword } from 'src/utils/password'
 import { RequestUser } from 'src/utils/type.shared'
+import { hasPermission } from 'src/utils/validation'
 
 import { RoleTypes } from 'src/models/enums/roles.enum'
 

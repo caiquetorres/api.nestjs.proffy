@@ -14,8 +14,8 @@ import { UpdateTimePayload } from '../models/update-time.payload'
 
 import { UserService } from 'src/modules/user/services/user.service'
 
-import { hasPermission } from 'src/utils/functions'
 import { RequestUser } from 'src/utils/type.shared'
+import { hasPermission } from 'src/utils/validation'
 
 @Injectable()
 export class TimeService extends TypeOrmCrudService<TimeEntity> {

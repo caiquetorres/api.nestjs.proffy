@@ -12,8 +12,8 @@ import { SubjectEntity } from '../entities/subject.entity'
 import { CreateSubjectPayload } from '../models/create-subject.payload'
 import { UpdateSubjectPayload } from '../models/update-subject.payload'
 
-import { isAdminUser } from '../../../utils/functions'
 import { RequestUser } from '../../../utils/type.shared'
+import { isAdminUser } from '../../../utils/validation'
 
 @Injectable()
 export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
