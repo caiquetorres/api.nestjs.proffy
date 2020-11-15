@@ -21,7 +21,7 @@ import { hasPermission } from 'src/utils/validation'
 export class TimeService extends TypeOrmCrudService<TimeEntity> {
     public constructor(
         @InjectRepository(TimeEntity)
-        repository: Repository<TimeEntity>,
+        private readonly repository: Repository<TimeEntity>,
         private readonly userService: UserService
     ) {
         super(repository)
@@ -38,7 +38,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
         userId: number,
         createTimePayload: CreateTimePayload
     ): Promise<TimeEntity> {
-        const user = await this.userService.get(requestUser, userId)
+        const user = await this.userService.get(userId)
         const entity = new TimeEntity({
             ...createTimePayload,
             user

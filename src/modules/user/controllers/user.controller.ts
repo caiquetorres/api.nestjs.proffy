@@ -50,7 +50,7 @@ export class UserController {
     @UseGuards(JwtAuthGuard)
     @Get('me')
     public async getMe(@User() requestUser: RequestUser): Promise<UserProxy> {
-        const entity = await this.userService.get(requestUser, requestUser.id)
+        const entity = await this.userService.get(requestUser.id)
         return entity.toProxy()
     }
 
@@ -59,15 +59,13 @@ export class UserController {
      * @param requestUser stores the user basic data
      * @param userId stores the user id
      */
-    @UseGuards(RolesAuthGuard)
-    @Roles(RoleTypes.USER, RoleTypes.ADMIN)
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     public async get(
         @User() requestUser: RequestUser,
         @Param('id') userId: number
     ): Promise<UserProxy> {
-        const entity = await this.userService.get(requestUser, userId)
+        const entity = await this.userService.get(userId)
         return entity.toProxy()
     }
 
