@@ -24,5 +24,9 @@ export class UpdateUserPayload {
 
     @IsOptional()
     @IsNumber({}, { message: DefaultValidationMessages.IsNumber })
+    public subjectId?: number
+
+    @IsOptional()
+    @IsNumber({}, { message: DefaultValidationMessages.IsNumber })
     public price?: number
 }
