@@ -9,6 +9,7 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
 import { UserEntity } from '../entities/user.entity'
+import { SubjectEntity } from 'src/modules/subject/entities/subject.entity'
 
 import { CreateUserPayload } from '../models/create-user.payload'
 import { UpdateUserPayload } from '../models/update-user.payload'
@@ -63,15 +64,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
      * @param userId stores the user id
      * @param requestUser stores the user basic data
      */
-    public async get(
-        requestUser: RequestUser,
-        userId: number
-    ): Promise<UserEntity> {
-        if (!hasPermission(requestUser, userId))
-            throw new UnauthorizedException(
-                'You have no permission to access those sources'
-            )
-
+    public async get(userId: number): Promise<UserEntity> {
         const entity = await UserEntity.findOne({
             where: { id: userId },
             relations: ['subject']
@@ -100,21 +93,18 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
             throw new UnauthorizedException(
                 'You have no permission to access those sources'
             )
-
         const existsUser = await UserEntity.exists(userId)
         if (!existsUser)
             throw new NotFoundException(
                 `The entity identified by "${userId}" was not found`
             )
-
         const { subjectId, ...rest } = updateUserPayload
-        const subject = await this.subjectService.get(subjectId)
-        if (!subject)
-            throw new NotFoundException(
-                `The entity identified by "${subjectId}" was not found`
-            )
 
-        console.log(subject)
+        let subject: SubjectEntity
+
+        if (subjectId !== undefined)
+            subject = await this.subjectService.get(subjectId)
+
         await UserEntity.update({ id: userId }, { ...rest, subject })
     }
 
