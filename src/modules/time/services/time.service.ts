@@ -38,6 +38,11 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
         userId: number,
         createTimePayload: CreateTimePayload
     ): Promise<TimeEntity> {
+        if (!hasPermission(requestUser, userId))
+            throw new UnauthorizedException(
+                'You have no permission to access those sources'
+            )
+
         const user = await this.userService.get(userId)
         const entity = new TimeEntity({
             ...createTimePayload,

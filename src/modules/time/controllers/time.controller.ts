@@ -59,7 +59,7 @@ export class TimeController {
     @Roles(RoleTypes.USER, RoleTypes.ADMIN)
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(CrudRequestInterceptor)
-    @Post('')
+    @Post()
     public async create(
         @User() requestUser: RequestUser,
         @Param('userId') userId: number,
@@ -91,7 +91,7 @@ export class TimeController {
      */
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(CrudRequestInterceptor)
-    @Get('')
+    @Get()
     public async getMany(
         @ParsedRequest() crudRequest: CrudRequest
     ): Promise<GetManyDefaultResponse<TimeProxy> | TimeProxy[]> {
