@@ -5,8 +5,15 @@ import {
     Get,
     Param,
     Post,
-    UseGuards
+    UseGuards,
+    UseInterceptors
 } from '@nestjs/common'
+import {
+    CrudRequest,
+    CrudRequestInterceptor,
+    GetManyDefaultResponse,
+    ParsedRequest
+} from '@nestjsx/crud'
 
 import { Roles } from 'src/decorators/roles/roles.decorator'
 import { User } from 'src/decorators/user/user.decorator'
@@ -42,12 +49,35 @@ export class FavoriteController {
         @Param('userId') userId: number,
         @Body() createFavoritePayload: CreateFavoritePayload
     ): Promise<FavoriteProxy> {
-        const entity = await this.favoriteService.create(
+        const entity = await this.favoriteService.createFavorite(
             requestUser,
             userId,
             createFavoritePayload
         )
         return entity.toProxy()
+    }
+
+    /**
+     * Method that can return favorite entities
+     * @param requestUser stores the user basic data
+     * @param userId stores the user id
+     * @param crudRequest stores the crud request parsed
+     */
+    @UseGuards(RolesAuthGuard)
+    @Roles(RoleTypes.ADMIN, RoleTypes.USER)
+    @UseGuards(JwtAuthGuard)
+    @UseInterceptors(CrudRequestInterceptor)
+    @Get()
+    public async getMany(
+        @User() requestUser: RequestUser,
+        @Param('userId') userId: number,
+        @ParsedRequest() crudRequest: CrudRequest
+    ): Promise<GetManyDefaultResponse<FavoriteProxy> | FavoriteProxy[]> {
+        return await this.favoriteService.getManyFavorites(
+            requestUser,
+            userId,
+            crudRequest
+        )
     }
 
     /**
@@ -65,7 +95,7 @@ export class FavoriteController {
         @Param('userId') userId: number,
         @Param('id') favoriteId: number
     ): Promise<FavoriteProxy> {
-        const entity = await this.favoriteService.get(
+        const entity = await this.favoriteService.getFavorite(
             requestUser,
             userId,
             favoriteId
@@ -88,6 +118,10 @@ export class FavoriteController {
         @Param('userId') userId: number,
         @Param('id') favoriteId: number
     ): Promise<void> {
-        await this.favoriteService.delete(requestUser, userId, favoriteId)
+        await this.favoriteService.deleteFavorite(
+            requestUser,
+            userId,
+            favoriteId
+        )
     }
 }

@@ -4,17 +4,21 @@ import {
     UnauthorizedException
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
 import { FavoriteEntity } from '../entities/favorite.entity'
 
 import { CreateFavoritePayload } from '../models/create-favorite.payload'
+import { FavoriteProxy } from '../models/favorite.proxy'
 
 import { UserService } from 'src/modules/user/services/user.service'
 
 import { RequestUser } from 'src/utils/type.shared'
 import { hasPermission } from 'src/utils/validation'
+
+import { Exclude } from 'class-transformer'
 
 @Injectable()
 export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
@@ -32,7 +36,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
      * @param userId stores the user id
      * @param createFavoritePayload stores the new favorite entity data
      */
-    public async create(
+    public async createFavorite(
         requestUser: RequestUser,
         userId: number,
         createFavoritePayload: CreateFavoritePayload
@@ -56,12 +60,43 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     }
 
     /**
+     * Method that can return favorite entities
+     * @param requestUser stores the user basic data
+     * @param userId stores the user id
+     * @param crudRequest stores the crud request parsed
+     */
+    public async getManyFavorites(
+        requestUser: RequestUser,
+        userId: number,
+        crudRequest: CrudRequest
+    ): Promise<GetManyDefaultResponse<FavoriteProxy> | FavoriteProxy[]> {
+        if (!hasPermission(requestUser, userId))
+            throw new UnauthorizedException(
+                'You have no permission to access those sources'
+            )
+
+        crudRequest.options.query.exclude = ['createAt', 'updateAt']
+        crudRequest.options.query.join = {
+            favoriteUser: {
+                eager: true,
+                exclude: ['password', 'createAt', 'updateAt']
+            },
+            'favoriteUser.subject': {
+                eager: true,
+                exclude: ['createAt', 'updateAt']
+            }
+        }
+
+        return await this.getMany(crudRequest)
+    }
+
+    /**
      * Method that can return a favorite entity
      * @param requestUser stores the user basic data
      * @param userId stores the user id
      * @param favoriteId stores the favorite user id
      */
-    public async get(
+    public async getFavorite(
         requestUser: RequestUser,
         userId: number,
         favoriteId: number
@@ -90,7 +125,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
      * @param userId stores the user id
      * @param favoriteId stores the favorite user id
      */
-    public async delete(
+    public async deleteFavorite(
         requestUser: RequestUser,
         userId: number,
         favoriteId: number
