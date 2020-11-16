@@ -9,7 +9,6 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
 import { UserEntity } from '../entities/user.entity'
-import { SubjectEntity } from 'src/modules/subject/entities/subject.entity'
 
 import { CreateUserPayload } from '../models/create-user.payload'
 import { UpdateUserPayload } from '../models/update-user.payload'
@@ -46,7 +45,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         )
         if (hasUserWithEmail)
             throw new ConflictException(
-                `The entity identified by "${createUserPayload.email}" already exists`
+                `The entity identified by '${createUserPayload.email}' already exists`
             )
 
         const encryptedPassword = await encryptPassword(password)
@@ -72,7 +71,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by "${userId}" was not found`
+                `The entity identified by '${userId}' was not found`
             )
 
         return entity
@@ -96,7 +95,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         const existsUser = await UserEntity.exists(userId)
         if (!existsUser)
             throw new NotFoundException(
-                `The entity identified by "${userId}" was not found`
+                `The entity identified by '${userId}' was not found`
             )
         const { subjectId, ...rest } = updateUserPayload
 
@@ -126,7 +125,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         const exists = await UserEntity.exists(userId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by "${userId}" was not found`
+                `The entity identified by '${userId}' was not found`
             )
 
         await UserEntity.delete({ id: userId })

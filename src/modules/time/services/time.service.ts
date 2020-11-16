@@ -63,7 +63,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by "${timeId}" was not found`
+                `The entity identified by '${timeId}' was not found`
             )
 
         return entity
@@ -90,7 +90,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
         const exists = await TimeEntity.exists(timeId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by "${timeId}" was not found`
+                `The entity identified by '${timeId}' was not found`
             )
 
         await TimeEntity.update({ id: timeId }, updateTimePayload)
@@ -115,7 +115,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
         const exists = await TimeEntity.exists(timeId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by "${timeId}" was not found`
+                `The entity identified by '${timeId}' was not found`
             )
 
         await TimeEntity.delete({ id: timeId })

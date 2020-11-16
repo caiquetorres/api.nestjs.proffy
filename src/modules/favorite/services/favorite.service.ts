@@ -18,8 +18,6 @@ import { UserService } from 'src/modules/user/services/user.service'
 import { RequestUser } from 'src/utils/type.shared'
 import { hasPermission } from 'src/utils/validation'
 
-import { Exclude } from 'class-transformer'
-
 @Injectable()
 export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     public constructor(
@@ -113,7 +111,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by "${favoriteId}" was not found`
+                `The entity identified by '${favoriteId}' was not found`
             )
 
         return entity
@@ -138,7 +136,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
         const exists = await FavoriteEntity.exists(favoriteId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by "${favoriteId}" was not found`
+                `The entity identified by '${favoriteId}' was not found`
             )
 
         await FavoriteEntity.delete({ id: favoriteId })

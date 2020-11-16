@@ -40,7 +40,7 @@ export class AuthService {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by "${email}" was not found`
+                `The entity identified by to '${email}' was not found`
             )
 
         const passwordIsMatch = await comparePassword(password, entity.password)

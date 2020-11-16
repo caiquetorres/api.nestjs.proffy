@@ -50,7 +50,7 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
         const entity = await SubjectEntity.findOne({ id: subjectId })
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by "${subjectId}" was not found`
+                `The entity identified by '${subjectId}' was not found`
             )
         return entity
     }
@@ -74,7 +74,7 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
         const exists = await SubjectEntity.exists(subjectId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by "${subjectId}" was not found`
+                `The entity identified by '${subjectId}' was not found`
             )
 
         await SubjectEntity.update({ id: subjectId }, updateSubjectPayload)
@@ -97,7 +97,7 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
         const exists = await SubjectEntity.exists(subjectId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by "${subjectId}" was not found`
+                `The entity identified by '${subjectId}' was not found`
             )
 
         await SubjectEntity.delete({ id: subjectId })
