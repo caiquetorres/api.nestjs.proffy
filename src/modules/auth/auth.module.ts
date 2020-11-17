@@ -13,7 +13,7 @@ import { UserModule } from '../user/user.module'
     imports: [
         forwardRef(() => UserModule),
         JwtModule.register({
-            secret: 'secret',
+            secret: process.env.JWT_SECRET,
             signOptions: { expiresIn: '1h' }
         })
     ],
