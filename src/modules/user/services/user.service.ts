@@ -19,6 +19,7 @@ import { encryptPassword } from 'src/utils/password'
 import { RequestUser } from 'src/utils/type.shared'
 import { hasPermission } from 'src/utils/validation'
 
+import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
 import { RoleTypes } from 'src/models/enums/roles.enum'
 
 @Injectable()
@@ -45,7 +46,9 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
         )
         if (hasUserWithEmail)
             throw new ConflictException(
-                `The entity identified by '${createUserPayload.email}' already exists`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(
+                    createUserPayload.email
+                )
             )
 
         const encryptedPassword = await encryptPassword(password)
@@ -71,7 +74,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by '${userId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
             )
 
         return entity
@@ -90,12 +93,12 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     ): Promise<void> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
         const existsUser = await UserEntity.exists(userId)
         if (!existsUser)
             throw new NotFoundException(
-                `The entity identified by '${userId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
             )
         const { subjectId, ...rest } = updateUserPayload
 
@@ -119,13 +122,13 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     ): Promise<void> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const exists = await UserEntity.exists(userId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by '${userId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
             )
 
         await UserEntity.delete({ id: userId })

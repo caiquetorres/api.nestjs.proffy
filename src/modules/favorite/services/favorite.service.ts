@@ -18,6 +18,8 @@ import { UserService } from 'src/modules/user/services/user.service'
 import { RequestUser } from 'src/utils/type.shared'
 import { hasPermission } from 'src/utils/validation'
 
+import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
+
 @Injectable()
 export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     public constructor(
@@ -41,7 +43,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     ): Promise<FavoriteEntity> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const user = await this.userService.get(userId)
@@ -70,7 +72,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     ): Promise<GetManyDefaultResponse<FavoriteProxy> | FavoriteProxy[]> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         crudRequest.options.query.exclude = ['createAt', 'updateAt']
@@ -101,7 +103,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     ): Promise<FavoriteEntity> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const entity = await FavoriteEntity.findOne({
@@ -111,7 +113,9 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by '${favoriteId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(
+                    favoriteId
+                )
             )
 
         return entity
@@ -130,13 +134,15 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     ): Promise<void> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const exists = await FavoriteEntity.exists(favoriteId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by '${favoriteId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(
+                    favoriteId
+                )
             )
 
         await FavoriteEntity.delete({ id: favoriteId })

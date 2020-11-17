@@ -1,9 +1,9 @@
 import { IsNumber, IsOptional } from 'class-validator'
-import { DefaultValidationMessages } from 'src/models/enums/default-validation-messages.enum'
+import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
 
 export class UpdateTimePayload {
     @IsOptional()
-    @IsNumber({}, { message: DefaultValidationMessages.IsNumber })
+    @IsNumber({}, { message: DefaultValidationMessages.isNumber })
     public weekDay?: number
 
     @IsOptional()

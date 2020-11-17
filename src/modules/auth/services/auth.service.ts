@@ -13,6 +13,8 @@ import { TokenProxy } from '../models/token.proxy'
 import { comparePassword } from 'src/utils/password'
 import { RequestUser } from 'src/utils/type.shared'
 
+import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
+
 @Injectable()
 export class AuthService {
     public constructor(private readonly jwtService: JwtService) {}
@@ -40,14 +42,14 @@ export class AuthService {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by to '${email}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(email)
             )
 
         const passwordIsMatch = await comparePassword(password, entity.password)
 
         if (!passwordIsMatch)
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         return {

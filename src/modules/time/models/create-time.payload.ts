@@ -1,8 +1,8 @@
 import { IsDefined, IsNumber } from 'class-validator'
-import { DefaultValidationMessages } from 'src/models/enums/default-validation-messages.enum'
+import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
 
 export class CreateTimePayload {
-    @IsNumber({}, { message: DefaultValidationMessages.IsNumber })
+    @IsNumber({}, { message: DefaultValidationMessages.isNumber })
     @IsDefined({ message: 'É necessário informar o dia da semana.' })
     public weekDay: number
 
@@ -12,7 +12,7 @@ export class CreateTimePayload {
     @IsDefined({ message: 'É necessário informar a data final.' })
     public to: Date
 
-    @IsNumber({}, { message: DefaultValidationMessages.IsNumber })
+    @IsNumber({}, { message: DefaultValidationMessages.isNumber })
     @IsDefined({ message: 'É necessário informar o id do usuário.' })
     public userId: number
 }

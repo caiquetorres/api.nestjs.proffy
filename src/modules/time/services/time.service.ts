@@ -17,6 +17,8 @@ import { UserService } from 'src/modules/user/services/user.service'
 import { RequestUser } from 'src/utils/type.shared'
 import { hasPermission } from 'src/utils/validation'
 
+import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
+
 @Injectable()
 export class TimeService extends TypeOrmCrudService<TimeEntity> {
     public constructor(
@@ -40,7 +42,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
     ): Promise<TimeEntity> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const user = await this.userService.get(userId)
@@ -63,7 +65,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
 
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by '${timeId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(timeId)
             )
 
         return entity
@@ -84,13 +86,13 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
     ): Promise<void> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const exists = await TimeEntity.exists(timeId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by '${timeId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(timeId)
             )
 
         await TimeEntity.update({ id: timeId }, updateTimePayload)
@@ -109,13 +111,13 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
     ): Promise<void> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const exists = await TimeEntity.exists(timeId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by '${timeId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(timeId)
             )
 
         await TimeEntity.delete({ id: timeId })

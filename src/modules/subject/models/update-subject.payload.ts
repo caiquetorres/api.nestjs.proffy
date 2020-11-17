@@ -1,8 +1,8 @@
-import { DefaultValidationMessages } from '../../../models/enums/default-validation-messages.enum'
+import { DefaultValidationMessages } from '../../../models/classes/default-validation-messages'
 import { IsOptional, IsString } from 'class-validator'
 
 export class UpdateSubjectPayload {
     @IsOptional()
-    @IsString({ message: DefaultValidationMessages.IsString })
+    @IsString({ message: DefaultValidationMessages.isString })
     name?: string
 }

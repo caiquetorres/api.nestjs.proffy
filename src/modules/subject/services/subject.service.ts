@@ -15,6 +15,8 @@ import { UpdateSubjectPayload } from '../models/update-subject.payload'
 import { RequestUser } from '../../../utils/type.shared'
 import { isAdminUser } from '../../../utils/validation'
 
+import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
+
 @Injectable()
 export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
     public constructor(
@@ -35,7 +37,7 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
     ): Promise<SubjectEntity> {
         if (!isAdminUser(requestUser))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const entity = new SubjectEntity(createSubjectPayload)
@@ -50,7 +52,9 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
         const entity = await SubjectEntity.findOne({ id: subjectId })
         if (!entity)
             throw new NotFoundException(
-                `The entity identified by '${subjectId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(
+                    subjectId
+                )
             )
         return entity
     }
@@ -68,13 +72,15 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
     ): Promise<void> {
         if (!isAdminUser(requestUser))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const exists = await SubjectEntity.exists(subjectId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by '${subjectId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(
+                    subjectId
+                )
             )
 
         await SubjectEntity.update({ id: subjectId }, updateSubjectPayload)
@@ -91,13 +97,15 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
     ): Promise<void> {
         if (!isAdminUser(requestUser))
             throw new UnauthorizedException(
-                'You have no permission to access those sources'
+                DefaultValidationMessages.unauthorized
             )
 
         const exists = await SubjectEntity.exists(subjectId)
         if (!exists)
             throw new NotFoundException(
-                `The entity identified by '${subjectId}' was not found`
+                DefaultValidationMessages.entityNotFoundDefaultMessage(
+                    subjectId
+                )
             )
 
         await SubjectEntity.delete({ id: subjectId })
