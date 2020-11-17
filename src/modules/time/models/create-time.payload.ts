@@ -3,16 +3,16 @@ import { DefaultValidationMessages } from 'src/models/classes/default-validation
 
 export class CreateTimePayload {
     @IsNumber({}, { message: DefaultValidationMessages.isNumber })
-    @IsDefined({ message: 'É necessário informar o dia da semana.' })
+    @IsDefined({ message: 'It is required to inform the week day.' })
     public weekDay: number
 
-    @IsDefined({ message: 'É necessário informar a data inicial.' })
+    @IsDefined({ message: 'It is required to inform the start date.' })
     public from: Date
 
-    @IsDefined({ message: 'É necessário informar a data final.' })
+    @IsDefined({ message: 'It is required to inform the end data.' })
     public to: Date
 
     @IsNumber({}, { message: DefaultValidationMessages.isNumber })
-    @IsDefined({ message: 'É necessário informar o id do usuário.' })
+    @IsDefined({ message: 'It is required to inform the user id.' })
     public userId: number
 }

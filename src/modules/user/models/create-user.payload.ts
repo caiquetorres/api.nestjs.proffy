@@ -2,19 +2,19 @@ import { IsDefined, IsEmail, IsOptional, IsString } from 'class-validator'
 import { DefaultValidationMessages } from 'src/models/classes/default-validation-messages'
 
 export class CreateUserPayload {
-    @IsDefined({ message: 'É necessário informar o nome.' })
+    @IsDefined({ message: 'It is required to inform the name.' })
     @IsString({ message: DefaultValidationMessages.isString })
     public name: string
 
-    @IsDefined({ message: 'É necessário informar o sobrenome.' })
+    @IsDefined({ message: 'It is required to inform the last name.' })
     @IsString({ message: DefaultValidationMessages.isString })
     public lastName: string
 
-    @IsDefined({ message: 'É necessário informar o email.' })
+    @IsDefined({ message: 'It is required to inform the e-mail.' })
     @IsString({ message: DefaultValidationMessages.isString })
     public email: string
 
-    @IsDefined({ message: 'É necessário informar a senha.' })
+    @IsDefined({ message: 'It is required to inform the password' })
     @IsString({ message: DefaultValidationMessages.isString })
     @IsEmail({}, { message: DefaultValidationMessages.isEmail })
     public password: string
