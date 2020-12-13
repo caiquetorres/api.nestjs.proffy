@@ -1,4 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 
 import { AuthService } from './services/auth.service'
@@ -11,10 +12,14 @@ import { UserModule } from '../user/user.module'
 
 @Module({
     imports: [
+        ConfigModule,
         forwardRef(() => UserModule),
-        JwtModule.register({
-            secret: process.env.JWT_SECRET,
-            signOptions: { expiresIn: '1h' }
+        JwtModule.registerAsync({
+            inject: [ConfigService],
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                privateKey: configService.get<string>('JWT_SECRET')
+            })
         })
     ],
     providers: [AuthService, JwtStrategy, LocalStrategy],
