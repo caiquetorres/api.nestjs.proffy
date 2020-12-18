@@ -19,7 +19,7 @@ export class UserEntity extends BaseEntity implements ToProxy<UserProxy> {
         type: 'text',
         nullable: true
     })
-    public photo?: string
+    public image?: string
 
     @Column({
         type: 'varchar',
@@ -68,13 +68,13 @@ export class UserEntity extends BaseEntity implements ToProxy<UserProxy> {
         type: 'text',
         nullable: true
     })
-    public description?: string
+    public about?: string
 
     @Column({
         type: 'decimal',
         nullable: true
     })
-    public price?: number
+    public cost?: number
 
     @ManyToOne(
         type => SubjectEntity,
