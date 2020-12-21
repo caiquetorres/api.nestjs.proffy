@@ -12,7 +12,7 @@ export class UpdateUserPayload {
 
     @IsOptional()
     @IsBase64({ message: DefaultValidationMessages.isBase64 })
-    public photo?: string
+    public image?: string
 
     @IsOptional()
     @IsString({ message: DefaultValidationMessages.isString })
@@ -20,7 +20,7 @@ export class UpdateUserPayload {
 
     @IsOptional()
     @IsString({ message: DefaultValidationMessages.isString })
-    public description?: string
+    public about?: string
 
     @IsOptional()
     @IsNumber({}, { message: DefaultValidationMessages.isNumber })
@@ -28,5 +28,5 @@ export class UpdateUserPayload {
 
     @IsOptional()
     @IsNumber({}, { message: DefaultValidationMessages.isNumber })
-    public price?: number
+    public cost?: number
 }
