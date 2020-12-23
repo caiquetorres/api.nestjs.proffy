@@ -11,8 +11,4 @@ export class CreateTimePayload {
 
     @IsDefined({ message: 'It is required to inform the end data.' })
     public to: Date
-
-    @IsNumber({}, { message: DefaultValidationMessages.isNumber })
-    @IsDefined({ message: 'It is required to inform the user id.' })
-    public userId: number
 }
