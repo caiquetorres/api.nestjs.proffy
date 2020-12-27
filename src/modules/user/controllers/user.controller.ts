@@ -61,10 +61,7 @@ export class UserController {
      */
     @UseGuards(JwtAuthGuard)
     @Get(':id')
-    public async get(
-        @User() requestUser: RequestUser,
-        @Param('id') userId: number
-    ): Promise<UserProxy> {
+    public async get(@Param('id') userId: number): Promise<UserProxy> {
         const entity = await this.userService.get(userId)
         return entity.toProxy()
     }
