@@ -88,8 +88,11 @@ export class TimeController {
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(CrudRequestInterceptor)
     @Get(':id')
-    public async get(@Param('id') timeId: number): Promise<TimeProxy> {
-        const entity = await this.timeService.list(timeId)
+    public async get(
+        @Param('userId') userId: number,
+        @Param('id') timeId: number
+    ): Promise<TimeProxy> {
+        const entity = await this.timeService.list(userId, timeId)
         return entity.toProxy()
     }
 

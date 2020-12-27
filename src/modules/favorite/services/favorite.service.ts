@@ -9,6 +9,7 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
 import { FavoriteEntity } from '../entities/favorite.entity'
+import { UserEntity } from 'src/modules/user/entities/user.entity'
 
 import { CreateFavoritePayload } from '../models/create-favorite.payload'
 import { FavoriteProxy } from '../models/favorite.proxy'
@@ -65,7 +66,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
      * @param userId stores the user id
      * @param favoriteId stores the favorite user id
      */
-    public async get(
+    public async list(
         requestUser: RequestUser,
         userId: number,
         favoriteId: number
@@ -73,6 +74,12 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
                 DefaultValidationMessages.unauthorized
+            )
+
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
             )
 
         const entity = await FavoriteEntity.findOne({
@@ -100,10 +107,16 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
         requestUser: RequestUser,
         userId: number,
         crudRequest: CrudRequest
-    ): Promise<GetManyDefaultResponse<FavoriteProxy> | FavoriteProxy[]> {
+    ): Promise<GetManyDefaultResponse<FavoriteEntity> | FavoriteEntity[]> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
                 DefaultValidationMessages.unauthorized
+            )
+
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
             )
 
         const originalSearchParams = [...crudRequest.parsed.search.$and]
@@ -130,8 +143,14 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
                 DefaultValidationMessages.unauthorized
             )
 
-        const exists = await FavoriteEntity.exists(favoriteId)
-        if (!exists)
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
+            )
+
+        const existsFavorite = await FavoriteEntity.exists(favoriteId)
+        if (!existsFavorite)
             throw new NotFoundException(
                 DefaultValidationMessages.entityNotFoundDefaultMessage(
                     favoriteId

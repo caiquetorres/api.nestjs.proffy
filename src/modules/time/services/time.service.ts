@@ -9,6 +9,7 @@ import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
 import { TimeEntity } from '../entities/time.entity'
+import { UserEntity } from 'src/modules/user/entities/user.entity'
 
 import { CreateTimePayload } from '../models/create-time.payload'
 import { TimeProxy } from '../models/time.proxy'
@@ -46,6 +47,11 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
             throw new UnauthorizedException(
                 DefaultValidationMessages.unauthorized
             )
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
+            )
 
         const user = await this.userService.get(userId)
         const entity = new TimeEntity({
@@ -59,7 +65,13 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
      * Method that can return a specific time
      * @param timeId stores the time id
      */
-    public async list(timeId: number): Promise<TimeEntity> {
+    public async list(userId: number, timeId: number): Promise<TimeEntity> {
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
+            )
+
         const entity = await TimeEntity.findOne({
             where: { id: timeId },
             relations: ['user']
@@ -83,6 +95,12 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
         userId: number,
         crudRequest: CrudRequest
     ): Promise<GetManyDefaultResponse<TimeProxy> | TimeProxy[]> {
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
+            )
+
         const originalSearchParams = [...crudRequest.parsed.search.$and]
         crudRequest.parsed.join.push({
             field: 'user'
@@ -111,8 +129,14 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
                 DefaultValidationMessages.unauthorized
             )
 
-        const exists = await TimeEntity.exists(timeId)
-        if (!exists)
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
+            )
+
+        const existsTime = await TimeEntity.exists(timeId)
+        if (!existsTime)
             throw new NotFoundException(
                 DefaultValidationMessages.entityNotFoundDefaultMessage(timeId)
             )
@@ -136,8 +160,14 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
                 DefaultValidationMessages.unauthorized
             )
 
-        const exists = await TimeEntity.exists(timeId)
-        if (!exists)
+        const existsUser = await UserEntity.exists(userId)
+        if (!existsUser)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
+            )
+
+        const existsTime = await TimeEntity.exists(timeId)
+        if (!existsTime)
             throw new NotFoundException(
                 DefaultValidationMessages.entityNotFoundDefaultMessage(timeId)
             )

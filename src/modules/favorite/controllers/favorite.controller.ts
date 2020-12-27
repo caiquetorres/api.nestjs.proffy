@@ -29,6 +29,7 @@ import { FavoriteProxy } from '../models/favorite.proxy'
 
 import { FavoriteService } from '../services/favorite.service'
 
+import { mapCrud } from 'src/utils/crud'
 import { RequestUser } from 'src/utils/type.shared'
 
 import { RoleTypes } from 'src/models/enums/roles.enum'
@@ -100,7 +101,7 @@ export class FavoriteController {
         @Param('userId') userId: number,
         @Param('id') favoriteId: number
     ): Promise<FavoriteProxy> {
-        const entity = await this.favoriteService.get(
+        const entity = await this.favoriteService.list(
             requestUser,
             userId,
             favoriteId
@@ -124,11 +125,12 @@ export class FavoriteController {
         @Param('userId') userId: number,
         @ParsedRequest() crudRequest: CrudRequest
     ): Promise<GetManyDefaultResponse<FavoriteProxy> | FavoriteProxy[]> {
-        return await this.favoriteService.listMany(
+        const getMany = await this.favoriteService.listMany(
             requestUser,
             userId,
             crudRequest
         )
+        return mapCrud(getMany)
     }
 
     /**
