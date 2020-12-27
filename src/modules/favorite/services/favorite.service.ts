@@ -36,7 +36,7 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
      * @param userId stores the user id
      * @param createFavoritePayload stores the new favorite entity data
      */
-    public async createFavorite(
+    public async create(
         requestUser: RequestUser,
         userId: number,
         createFavoritePayload: CreateFavoritePayload
@@ -60,43 +60,12 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     }
 
     /**
-     * Method that can return favorite entities
-     * @param requestUser stores the user basic data
-     * @param userId stores the user id
-     * @param crudRequest stores the crud request parsed
-     */
-    public async getManyFavorites(
-        requestUser: RequestUser,
-        userId: number,
-        crudRequest: CrudRequest
-    ): Promise<GetManyDefaultResponse<FavoriteProxy> | FavoriteProxy[]> {
-        if (!hasPermission(requestUser, userId))
-            throw new UnauthorizedException(
-                DefaultValidationMessages.unauthorized
-            )
-
-        crudRequest.options.query.exclude = ['createAt', 'updateAt']
-        crudRequest.options.query.join = {
-            favoriteUser: {
-                eager: true,
-                exclude: ['password', 'createAt', 'updateAt']
-            },
-            'favoriteUser.subject': {
-                eager: true,
-                exclude: ['createAt', 'updateAt']
-            }
-        }
-
-        return await this.getMany(crudRequest)
-    }
-
-    /**
      * Method that can return a favorite entity
      * @param requestUser stores the user basic data
      * @param userId stores the user id
      * @param favoriteId stores the favorite user id
      */
-    public async getFavorite(
+    public async get(
         requestUser: RequestUser,
         userId: number,
         favoriteId: number
@@ -122,12 +91,31 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
     }
 
     /**
+     * Method that can return favorite entities
+     * @param requestUser stores the user basic data
+     * @param userId stores the user id
+     * @param crudRequest stores the crud request parsed
+     */
+    public async listMany(
+        requestUser: RequestUser,
+        userId: number,
+        crudRequest: CrudRequest
+    ): Promise<GetManyDefaultResponse<FavoriteProxy> | FavoriteProxy[]> {
+        if (!hasPermission(requestUser, userId))
+            throw new UnauthorizedException(
+                DefaultValidationMessages.unauthorized
+            )
+
+        return await this.getMany(crudRequest)
+    }
+
+    /**
      * Method that remove a favorite entity from the database
      * @param requestUser stores the user basic data
      * @param userId stores the user id
      * @param favoriteId stores the favorite user id
      */
-    public async deleteFavorite(
+    public async delete(
         requestUser: RequestUser,
         userId: number,
         favoriteId: number
