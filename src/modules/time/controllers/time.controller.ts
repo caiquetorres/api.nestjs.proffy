@@ -47,10 +47,10 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
     query: {
         join: {
             user: {
-                exclude: ['password', 'createAt', 'updateAt']
+                exclude: ['password', 'createdAt', 'updatedAt']
             }
         },
-        exclude: ['createAt', 'updateAt']
+        exclude: ['createdAt', 'updatedAt']
     }
 })
 @Controller('users/:userId/times/')

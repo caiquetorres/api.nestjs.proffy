@@ -10,10 +10,10 @@ export class BaseEntity extends BaseEntityTypeOrm {
     id: number
 
     @CreateDateColumn()
-    createAt: Date
+    createdAt: Date
 
     @UpdateDateColumn()
-    updateAt: Date
+    updatedAt: Date
 
     public static async exists(id: number): Promise<boolean> {
         const entity = await this.findOne({ id })
