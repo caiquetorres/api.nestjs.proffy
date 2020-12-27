@@ -49,7 +49,8 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
             user: {
                 exclude: ['password', 'createAt', 'updateAt']
             }
-        }
+        },
+        exclude: ['createAt', 'updateAt']
     }
 })
 @Controller('users/:userId/times/')
