@@ -107,7 +107,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
             return
         }
 
-        const subject = await this.subjectService.get(subjectId)
+        const subject = await this.subjectService.list(subjectId)
         await UserEntity.update({ id: userId }, { ...rest, subject })
     }
 

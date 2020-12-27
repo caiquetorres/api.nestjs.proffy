@@ -4,6 +4,7 @@ import {
     UnauthorizedException
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
@@ -48,7 +49,7 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
      * Method that can return a subject entity
      * @param subjectId stores the subject id
      */
-    public async get(subjectId: number): Promise<SubjectEntity> {
+    public async list(subjectId: number): Promise<SubjectEntity> {
         const entity = await SubjectEntity.findOne({ id: subjectId })
         if (!entity)
             throw new NotFoundException(
@@ -57,6 +58,16 @@ export class SubjectService extends TypeOrmCrudService<SubjectEntity> {
                 )
             )
         return entity
+    }
+
+    /**
+     * Method that can return subject entities
+     * @param crudRequest stores the user request parsed
+     */
+    public async listMany(
+        crudRequest: CrudRequest
+    ): Promise<GetManyDefaultResponse<SubjectEntity> | SubjectEntity[]> {
+        return await this.getMany(crudRequest)
     }
 
     /**
