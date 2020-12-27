@@ -106,6 +106,11 @@ export class FavoriteService extends TypeOrmCrudService<FavoriteEntity> {
                 DefaultValidationMessages.unauthorized
             )
 
+        const originalSearchParams = [...crudRequest.parsed.search.$and]
+        crudRequest.parsed.search = {
+            $and: [{ 'user.id': userId }, ...originalSearchParams]
+        }
+
         return await this.getMany(crudRequest)
     }
 

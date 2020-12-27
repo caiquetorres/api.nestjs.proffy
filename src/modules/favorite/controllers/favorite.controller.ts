@@ -42,6 +42,10 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
     },
     query: {
         join: {
+            user: {
+                eager: true,
+                exclude: ['password', 'createAt', 'updateAt']
+            },
             favoriteUser: {
                 eager: true,
                 exclude: ['password', 'createAt', 'updateAt']
@@ -51,7 +55,7 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
                 exclude: ['createAt', 'updateAt']
             }
         },
-        exclude: ['createAt', 'updateAt']
+        exclude: ['user', 'createAt', 'updateAt']
     }
 })
 @Controller('users/:userId/favorites')
