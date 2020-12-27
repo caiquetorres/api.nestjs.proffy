@@ -6,14 +6,15 @@ import {
     Param,
     Post,
     Put,
-    UseGuards
+    UseGuards,
+    UseInterceptors
 } from '@nestjs/common'
 import {
     Crud,
     CrudRequest,
-    Override,
     GetManyDefaultResponse,
-    ParsedRequest
+    ParsedRequest,
+    CrudRequestInterceptor
 } from '@nestjsx/crud'
 
 import { Roles } from '../../../decorators/roles/roles.decorator'
@@ -64,27 +65,27 @@ export class SubjectController {
     }
 
     /**
-     * Method that can return subject entities
-     * @param crudRequest stores the user request parsed
-     */
-    @UseGuards(JwtAuthGuard)
-    @Override()
-    @Get()
-    public async getMany(
-        @ParsedRequest() crudRequest: CrudRequest
-    ): Promise<GetManyDefaultResponse<SubjectProxy> | SubjectProxy[]> {
-        return await this.subjectService.getMany(crudRequest)
-    }
-
-    /**
      * Method that can return a subject entity
      * @param subjectId stores the subject id
      */
     @UseGuards(JwtAuthGuard)
     @Get(':id')
     public async get(@Param('id') subjectId: number): Promise<SubjectProxy> {
-        const entity = await this.subjectService.get(subjectId)
+        const entity = await this.subjectService.list(subjectId)
         return entity.toProxy()
+    }
+
+    /**
+     * Method that can return subject entities
+     * @param crudRequest stores the user request parsed
+     */
+    @UseGuards(JwtAuthGuard)
+    @UseInterceptors(CrudRequestInterceptor)
+    @Get()
+    public async getMany(
+        @ParsedRequest() crudRequest: CrudRequest
+    ): Promise<GetManyDefaultResponse<SubjectProxy> | SubjectProxy[]> {
+        return await this.subjectService.listMany(crudRequest)
     }
 
     /**

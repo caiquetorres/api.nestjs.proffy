@@ -43,6 +43,14 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
         userId: {
             disabled: true
         }
+    },
+    query: {
+        join: {
+            user: {
+                exclude: ['password', 'createAt', 'updateAt']
+            }
+        },
+        exclude: ['createAt', 'updateAt']
     }
 })
 @Controller('users/:userId/times/')
@@ -81,7 +89,7 @@ export class TimeController {
     @UseInterceptors(CrudRequestInterceptor)
     @Get(':id')
     public async get(@Param('id') timeId: number): Promise<TimeProxy> {
-        const entity = await this.timeService.get(timeId)
+        const entity = await this.timeService.list(timeId)
         return entity.toProxy()
     }
 
@@ -93,9 +101,10 @@ export class TimeController {
     @UseInterceptors(CrudRequestInterceptor)
     @Get()
     public async getMany(
+        @Param('userId') userId: number,
         @ParsedRequest() crudRequest: CrudRequest
     ): Promise<GetManyDefaultResponse<TimeProxy> | TimeProxy[]> {
-        return await this.timeService.getMany(crudRequest)
+        return await this.timeService.listMany(userId, crudRequest)
     }
 
     /**
