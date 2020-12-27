@@ -4,12 +4,14 @@ import {
     UnauthorizedException
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
+import { CrudRequest, GetManyDefaultResponse } from '@nestjsx/crud'
 import { TypeOrmCrudService } from '@nestjsx/crud-typeorm'
 import { Repository } from 'typeorm'
 
 import { TimeEntity } from '../entities/time.entity'
 
 import { CreateTimePayload } from '../models/create-time.payload'
+import { TimeProxy } from '../models/time.proxy'
 import { UpdateTimePayload } from '../models/update-time.payload'
 
 import { UserService } from 'src/modules/user/services/user.service'
@@ -57,7 +59,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
      * Method that can return a specific time
      * @param timeId stores the time id
      */
-    public async get(timeId: number): Promise<TimeEntity> {
+    public async list(timeId: number): Promise<TimeEntity> {
         const entity = await TimeEntity.findOne({
             where: { id: timeId },
             relations: ['user']
@@ -69,6 +71,26 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
             )
 
         return entity
+    }
+
+    /**
+     * Method that can return all the times of some user
+     * @param userId stores the user id
+     * @param crudRequest stores the logic that will be used toe find the
+     * entities
+     */
+    public async listMany(
+        userId: number,
+        crudRequest: CrudRequest
+    ): Promise<GetManyDefaultResponse<TimeProxy> | TimeProxy[]> {
+        const originalSearchParams = [...crudRequest.parsed.search.$and]
+        crudRequest.parsed.join.push({
+            field: 'user'
+        })
+        crudRequest.parsed.search = {
+            $and: [{ 'user.id': userId }, ...originalSearchParams]
+        }
+        return await this.getMany(crudRequest)
     }
 
     /**
