@@ -32,6 +32,7 @@ import { UpdateSubjectPayload } from '../models/update-subject.payload'
 import { SubjectService } from '../services/subject.service'
 
 import { RequestUser } from '../../../utils/type.shared'
+import { mapCrud } from 'src/utils/crud'
 
 import { RoleTypes } from '../../../models/enums/roles.enum'
 
@@ -85,7 +86,8 @@ export class SubjectController {
     public async getMany(
         @ParsedRequest() crudRequest: CrudRequest
     ): Promise<GetManyDefaultResponse<SubjectProxy> | SubjectProxy[]> {
-        return await this.subjectService.listMany(crudRequest)
+        const getMany = await this.subjectService.listMany(crudRequest)
+        return mapCrud(getMany)
     }
 
     /**

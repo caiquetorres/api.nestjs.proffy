@@ -12,7 +12,6 @@ import { FavoriteEntity } from '../entities/favorite.entity'
 import { UserEntity } from 'src/modules/user/entities/user.entity'
 
 import { CreateFavoritePayload } from '../models/create-favorite.payload'
-import { FavoriteProxy } from '../models/favorite.proxy'
 
 import { UserService } from 'src/modules/user/services/user.service'
 

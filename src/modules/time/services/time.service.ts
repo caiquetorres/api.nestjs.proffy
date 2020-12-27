@@ -12,7 +12,6 @@ import { TimeEntity } from '../entities/time.entity'
 import { UserEntity } from 'src/modules/user/entities/user.entity'
 
 import { CreateTimePayload } from '../models/create-time.payload'
-import { TimeProxy } from '../models/time.proxy'
 import { UpdateTimePayload } from '../models/update-time.payload'
 
 import { UserService } from 'src/modules/user/services/user.service'
@@ -94,7 +93,7 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
     public async listMany(
         userId: number,
         crudRequest: CrudRequest
-    ): Promise<GetManyDefaultResponse<TimeProxy> | TimeProxy[]> {
+    ): Promise<GetManyDefaultResponse<TimeEntity> | TimeEntity[]> {
         const existsUser = await UserEntity.exists(userId)
         if (!existsUser)
             throw new NotFoundException(

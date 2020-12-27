@@ -31,6 +31,7 @@ import { UpdateTimePayload } from '../models/update-time.payload'
 
 import { TimeService } from '../services/time.service'
 
+import { mapCrud } from 'src/utils/crud'
 import { RequestUser } from 'src/utils/type.shared'
 
 import { RoleTypes } from 'src/models/enums/roles.enum'
@@ -46,11 +47,8 @@ import { RoleTypes } from 'src/models/enums/roles.enum'
     },
     query: {
         join: {
-            user: {
-                exclude: ['password', 'createdAt', 'updatedAt']
-            }
-        },
-        exclude: ['createdAt', 'updatedAt']
+            user: {}
+        }
     }
 })
 @Controller('users/:userId/times/')
@@ -107,7 +105,8 @@ export class TimeController {
         @Param('userId') userId: number,
         @ParsedRequest() crudRequest: CrudRequest
     ): Promise<GetManyDefaultResponse<TimeProxy> | TimeProxy[]> {
-        return await this.timeService.listMany(userId, crudRequest)
+        const getMany = await this.timeService.listMany(userId, crudRequest)
+        return mapCrud(getMany)
     }
 
     /**
