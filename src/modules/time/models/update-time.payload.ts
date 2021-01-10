@@ -7,8 +7,8 @@ export class UpdateTimePayload {
     public weekDay?: number
 
     @IsOptional()
-    public from?: Date
+    public from?: string
 
     @IsOptional()
-    public to?: Date
+    public to?: string
 }

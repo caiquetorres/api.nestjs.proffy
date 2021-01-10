@@ -7,8 +7,8 @@ export class CreateTimePayload {
     public weekDay: number
 
     @IsDefined({ message: 'It is required to inform the start date.' })
-    public from: Date
+    public from: string
 
     @IsDefined({ message: 'It is required to inform the end data.' })
-    public to: Date
+    public to: string
 }

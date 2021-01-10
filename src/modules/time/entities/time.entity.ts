@@ -14,25 +14,25 @@ export class TimeEntity extends BaseEntity implements ToProxy<TimeProxy> {
     }
 
     @Column({
-        type: 'int',
+        type: 'tinyint',
         nullable: false
     })
     public weekDay: number
 
     @Column({
-        type: 'datetime',
+        type: 'time',
         nullable: false
     })
-    public from: Date
+    public from: string
 
     @Column({
-        type: 'datetime',
+        type: 'time',
         nullable: false
     })
-    public to: Date
+    public to: string
 
     @ManyToOne(
-        type => UserEntity,
+        () => UserEntity,
         user => user.times,
         {
             onDelete: 'CASCADE'
