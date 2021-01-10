@@ -21,7 +21,7 @@ export class SubjectEntity extends BaseEntity implements ToProxy<SubjectProxy> {
     public name: string
 
     @OneToMany(
-        type => UserEntity,
+        () => UserEntity,
         user => user.subject
     )
     users: UserEntity[]

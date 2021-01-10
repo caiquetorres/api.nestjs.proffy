@@ -15,13 +15,13 @@ export class FavoriteEntity extends BaseEntity
     }
 
     @ManyToOne(
-        type => UserEntity,
+        () => UserEntity,
         user => user.users
     )
     public user: UserEntity
 
     @ManyToOne(
-        type => UserEntity,
+        () => UserEntity,
         user => user.favorites
     )
     public favoriteUser: UserEntity
