@@ -20,7 +20,7 @@ export class AuthController {
      */
     @UseGuards(LocalAuthGuard)
     @Post('/local')
-    public async signIn(@User() user: RequestUser): Promise<TokenProxy> {
-        return await this.authService.signIn(user)
+    public async signIn(@User() requestUser: RequestUser): Promise<TokenProxy> {
+        return await this.authService.signIn(requestUser)
     }
 }

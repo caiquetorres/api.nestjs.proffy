@@ -77,25 +77,25 @@ export class UserEntity extends BaseEntity implements ToProxy<UserProxy> {
     public cost?: number
 
     @ManyToOne(
-        type => SubjectEntity,
+        () => SubjectEntity,
         subject => subject.users
     )
     public subject: SubjectEntity
 
     @OneToMany(
-        type => TimeEntity,
+        () => TimeEntity,
         time => time.user
     )
     public times: TimeEntity[]
 
     @OneToMany(
-        type => FavoriteEntity,
+        () => FavoriteEntity,
         favorite => favorite.user
     )
     public users: FavoriteEntity[]
 
     @OneToMany(
-        type => FavoriteEntity,
+        () => FavoriteEntity,
         favorite => favorite.favoriteUser
     )
     public favorites: FavoriteEntity[]
