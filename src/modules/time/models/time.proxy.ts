@@ -6,8 +6,8 @@ import { UserProxy } from 'src/modules/user/models/user.proxy'
 export class TimeProxy {
     public id?: number
     public weekDay?: number
-    public from?: Date
-    public to?: Date
+    public from?: string
+    public to?: string
     public user?: UserProxy
 
     public constructor(partial: Partial<TimeEntity>) {
