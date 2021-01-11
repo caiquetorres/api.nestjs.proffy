@@ -12,11 +12,11 @@ export class CreateUserPayload {
 
     @IsDefined({ message: 'It is required to inform the e-mail.' })
     @IsString({ message: DefaultValidationMessages.isString })
+    @IsEmail({}, { message: DefaultValidationMessages.isEmail })
     public email: string
 
     @IsDefined({ message: 'It is required to inform the password' })
     @IsString({ message: DefaultValidationMessages.isString })
-    @IsEmail({}, { message: DefaultValidationMessages.isEmail })
     public password: string
 
     @IsOptional()
