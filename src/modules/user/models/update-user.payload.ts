@@ -1,5 +1,5 @@
 import { DefaultValidationMessages } from '../../../models/classes/default-validation-messages'
-import { IsBase64, IsNumber, IsOptional, IsString } from 'class-validator'
+import { IsNumber, IsOptional, IsString } from 'class-validator'
 
 export class UpdateUserPayload {
     @IsOptional()
@@ -11,11 +11,10 @@ export class UpdateUserPayload {
     public lastName?: string
 
     @IsOptional()
-    @IsBase64({ message: DefaultValidationMessages.isBase64 })
+    @IsString({ message: DefaultValidationMessages.isString })
     public image?: string
 
     @IsOptional()
-    @IsString({ message: DefaultValidationMessages.isString })
     public whatsapp?: string
 
     @IsOptional()
