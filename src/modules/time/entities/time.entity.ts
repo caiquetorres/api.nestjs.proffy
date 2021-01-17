@@ -40,7 +40,7 @@ export class TimeEntity extends BaseEntity implements ToProxy<TimeProxy> {
     )
     public user: UserEntity
 
-    toProxy(): TimeProxy {
+    public toProxy(): TimeProxy {
         return new TimeProxy(this)
     }
 }

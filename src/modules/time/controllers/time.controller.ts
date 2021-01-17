@@ -3,6 +3,7 @@ import {
     Controller,
     Delete,
     Get,
+    Logger,
     Param,
     Patch,
     Post,
@@ -69,14 +70,19 @@ export class TimeController {
     public async create(
         @User() requestUser: RequestUser,
         @Param('userId') userId: number,
-        @Body() createTimePayload: CreateTimePayload
-    ): Promise<TimeProxy> {
-        const entity = await this.timeService.create(
+        @Body() createTimePayload: CreateTimePayload | CreateTimePayload[]
+    ): Promise<TimeProxy | TimeProxy[]> {
+        const entities = await this.timeService.create(
             requestUser,
             userId,
             createTimePayload
         )
-        return entity.toProxy()
+
+        if (Array.isArray(entities)) {
+            return entities.map(entity => entity.toProxy())
+        }
+
+        return entities.toProxy()
     }
 
     /**

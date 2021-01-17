@@ -1,5 +1,6 @@
 import {
     Injectable,
+    Logger,
     NotFoundException,
     UnauthorizedException
 } from '@nestjs/common'
@@ -40,19 +41,29 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
     public async create(
         requestUser: RequestUser,
         userId: number,
-        createTimePayload: CreateTimePayload
-    ): Promise<TimeEntity> {
+        createTimePayload: CreateTimePayload | CreateTimePayload[]
+    ): Promise<TimeEntity | TimeEntity[]> {
         if (!hasPermission(requestUser, userId))
             throw new UnauthorizedException(
                 DefaultValidationMessages.unauthorized
             )
-        const existsUser = await UserEntity.exists(userId)
-        if (!existsUser)
+
+        const user = await this.userService.get(userId)
+        if (!user)
             throw new NotFoundException(
                 DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
             )
 
-        const user = await this.userService.get(userId)
+        if (Array.isArray(createTimePayload)) {
+            const entities = await this.repository.save(
+                createTimePayload.map(payload => ({
+                    ...payload,
+                    user
+                }))
+            )
+            return entities.map(entity => new TimeEntity(entity))
+        }
+
         const entity = new TimeEntity({
             ...createTimePayload,
             user
