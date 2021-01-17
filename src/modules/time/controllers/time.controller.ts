@@ -153,4 +153,21 @@ export class TimeController {
     ): Promise<void> {
         await this.timeService.delete(requestUser, userId, timeId)
     }
+
+    /**
+     * Method that deletes all the times entities from the database
+     * @param requestUser stores the user basic data
+     * @param userId stores the user id
+     */
+    @UseGuards(RolesAuthGuard)
+    @Roles(RoleTypes.USER, RoleTypes.ADMIN)
+    @UseGuards(JwtAuthGuard)
+    @UseInterceptors(CrudRequestInterceptor)
+    @Delete()
+    public async clear(
+        @User() requestUser: RequestUser,
+        @Param('userId') userId: number
+    ): Promise<void> {
+        await this.timeService.clear(requestUser, userId)
+    }
 }

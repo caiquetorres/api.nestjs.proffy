@@ -173,4 +173,27 @@ export class TimeService extends TypeOrmCrudService<TimeEntity> {
 
         await TimeEntity.delete({ id: timeId })
     }
+
+    /**
+     * Method that deletes all the times entities from the database
+     * @param requestUser stores the user basic data
+     * @param userId stores the user id
+     */
+    public async clear(
+        requestUser: RequestUser,
+        userId: number
+    ): Promise<void> {
+        if (!hasPermission(requestUser, userId))
+            throw new UnauthorizedException(
+                DefaultValidationMessages.unauthorized
+            )
+
+        const user = await UserEntity.findOne({ id: userId })
+        if (!user)
+            throw new NotFoundException(
+                DefaultValidationMessages.entityNotFoundDefaultMessage(userId)
+            )
+
+        await TimeEntity.delete({ user })
+    }
 }
